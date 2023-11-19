@@ -9,7 +9,7 @@ const Firebase = require('../firebase');
 function controller(io, firebase, socket) {
   console.log('Client connected');
 
-  firebase.on('value', (snapshot) => {
+  firebase.on('baochay','value', (snapshot) => {
     const data = snapshot.val();
     console.log(1, { data });
     socket.emit('data', data);

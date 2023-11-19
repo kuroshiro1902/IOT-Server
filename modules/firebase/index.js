@@ -15,7 +15,7 @@ class Firebase {
 
     this.database = this.admin.database();
     this.userRef = this.database.ref('user');
-    this.dataRef = this.database.ref('data');
+    this.dataRef = this.database.ref('baochay');
 
     // Xử lý lỗi khi kết nối đến Firebase
     this.database.ref('.info/connected').on('value', (snapshot) => {
@@ -34,7 +34,9 @@ class Firebase {
    */
   on(type, event, handler) {
     const ref = type === 'user' ? this.userRef : this.dataRef;
-    ref.on(event, handler);
+    // ref.on(event, handler);
+
+    ref.orderByChild('timestamp').limitToLast(1).on(event, handler);
   }
 }
 
