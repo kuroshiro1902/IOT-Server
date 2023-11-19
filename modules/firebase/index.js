@@ -3,7 +3,8 @@ const { database } = require('firebase-admin');
 class Firebase {
   admin;
   database;
-  ref;
+  userRef;
+  dataRef;
 
   constructor(databaseURL) {
     this.admin = require('firebase-admin');
@@ -13,7 +14,8 @@ class Firebase {
     });
 
     this.database = this.admin.database();
-    this.ref = this.database.ref();
+    this.userRef = this.database.ref('user');
+    this.dataRef = this.database.ref('data');
 
     // Xử lý lỗi khi kết nối đến Firebase
     this.database.ref('.info/connected').on('value', (snapshot) => {
@@ -26,11 +28,13 @@ class Firebase {
   }
 
   /**
+   * @param {'user' | 'data'} type
    * @param {| 'value'| 'child_added' | 'child_changed' | 'child_moved' | 'child_removed'} event
    * @param {(a: database.DataSnapshot, b?: string | null) => any} handler
    */
-  on(event, handler) {
-    this.ref.on(event, handler);
+  on(type, event, handler) {
+    const ref = type === 'user' ? this.userRef : this.dataRef;
+    ref.on(event, handler);
   }
 }
 
