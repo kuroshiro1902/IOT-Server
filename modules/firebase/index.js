@@ -1,5 +1,4 @@
 const { database } = require('firebase-admin');
-const { Socket } = require('socket.io');
 
 class Firebase {
   admin;
@@ -27,22 +26,7 @@ class Firebase {
   }
 
   /**
-   * @param {Socket} socket
-   */
-  addSocketEvent(socket) {
-    this.onValue(socket);
-  }
-
-  onValue(socket) {
-    this.ref.on('value', (snapshot) => {
-      const data = snapshot.val();
-      console.log(1, { data });
-      socket.emit('fireStatus', data);
-    });
-  }
-
-  /**
-   * @param {string} event
+   * @param {| 'value'| 'child_added' | 'child_changed' | 'child_moved' | 'child_removed'} event
    * @param {(a: database.DataSnapshot, b?: string | null) => any} handler
    */
   on(event, handler) {
