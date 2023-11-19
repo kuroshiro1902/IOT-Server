@@ -12,7 +12,7 @@ function controller(io, firebase, socket) {
   firebase.on('value', (snapshot) => {
     const data = snapshot.val();
     console.log(1, { data });
-    socket.emit('fireStatus', data);
+    socket.emit('data', data);
   });
 
   // Ngắt kết nối
