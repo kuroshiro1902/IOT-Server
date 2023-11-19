@@ -11,8 +11,12 @@ function controller(io, firebase, socket) {
 
   firebase.on('baochay','value', (snapshot) => {
     const data = snapshot.val();
-    console.log(1, { data });
-    socket.emit('fireStatus', data);
+    var dataArray = Object.values(data);
+    dataArray.reverse()
+
+    console.log(dataArray);
+    // console.log(data);
+    socket.emit('fireStatus', dataArray);
   });
 
   // Ngắt kết nối
