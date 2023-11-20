@@ -32,7 +32,7 @@ class Firebase {
   }
 
   /**
-   * @param {'user' | 'data'} type
+   * @param {'user' | 'baochay' | 'tialua' | 'nhietdodoam'} type
    * @param {| 'value'| 'child_added' | 'child_changed' | 'child_moved' | 'child_removed'} event
    * @param {(a: database.DataSnapshot, b?: string | null) => any} handler
    */
@@ -45,9 +45,7 @@ class Firebase {
         : type === 'tialua'
         ? this.tialuaRef
         : this.nhietdodoamRef;
-    // ref.on(event, handler);
-
-    ref.orderByChild('timestamp').limitToLast(10).on(event, handler);
+    ref.on(event, handler);
   }
 }
 

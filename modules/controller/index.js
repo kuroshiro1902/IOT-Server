@@ -9,6 +9,7 @@ const Firebase = require('../firebase');
 function controller(io, firebase, socket) {
   console.log('Client connected');
 
+
   firebase.on('khigas','value', (snapshot) => {
     const data = snapshot.val();
     var dataArray = Object.values(data);
@@ -35,6 +36,7 @@ function controller(io, firebase, socket) {
     console.log(dataArray);
     // console.log(data);
     socket.emit('tialua', dataArray);
+
   });
 
   // Ngắt kết nối
