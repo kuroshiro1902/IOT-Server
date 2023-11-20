@@ -36,7 +36,7 @@ class Firebase {
     const ref = type === 'user' ? this.userRef : this.dataRef;
     // ref.on(event, handler);
 
-    ref.orderByChild('timestamp').limitToLast(1).on(event, handler);
+    ref.orderByChild('timestamp').limitToLast(10).on(event, handler);
   }
 }
 

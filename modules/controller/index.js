@@ -9,10 +9,14 @@ const Firebase = require('../firebase');
 function controller(io, firebase, socket) {
   console.log('Client connected');
 
-  firebase.on('baochay','value', (snapshot) => {
+  firebase.on('baochay', 'value', (snapshot) => {
     const data = snapshot.val();
-    console.log(1, { data });
-    socket.emit('data', data);
+    var dataArray = Object.values(data);
+    dataArray.reverse();
+
+    console.log(dataArray);
+    // console.log(data);
+    socket.emit('data', dataArray);
   });
 
   // Ngắt kết nối
