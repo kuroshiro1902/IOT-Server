@@ -4,7 +4,7 @@ class Firebase {
   admin;
   database;
   userRef;
-  baochayRef;
+  khigasRef;
   nhietdodoamRef;
   tialuaRef;
 
@@ -17,7 +17,7 @@ class Firebase {
 
     this.database = this.admin.database();
     this.userRef = this.database.ref('user');
-    this.baochayRef = this.database.ref('baochay');
+    this.khigasRef = this.database.ref('khigas');
     this.nhietdodoamRef = this.database.ref('nhietdodoam');
     this.tialuaRef = this.database.ref('tialua');
 
@@ -40,8 +40,8 @@ class Firebase {
     const ref =
       type === 'user'
         ? this.userRef
-        : type === 'baochay'
-        ? this.baochayRef
+        : type === 'khigas'
+        ? this.khigasRef
         : type === 'tialua'
         ? this.tialuaRef
         : this.nhietdodoamRef;

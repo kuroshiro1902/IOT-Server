@@ -9,14 +9,14 @@ const Firebase = require('../firebase');
 function controller(io, firebase, socket) {
   console.log('Client connected');
 
-  firebase.on('baochay','value', (snapshot) => {
+  firebase.on('khigas','value', (snapshot) => {
     const data = snapshot.val();
     var dataArray = Object.values(data);
     dataArray.reverse()
 
     console.log(dataArray);
     // console.log(data);
-    socket.emit('fireStatus', dataArray);
+    socket.emit('khigas', dataArray);
   });
   firebase.on('nhietdodoam','value', (snapshot) => {
     const data = snapshot.val();
@@ -25,7 +25,7 @@ function controller(io, firebase, socket) {
 
     console.log(dataArray);
     // console.log(data);
-    socket.emit('fireStatus', dataArray);
+    socket.emit('nhietdodoam', dataArray);
   });
   firebase.on('tialua','value', (snapshot) => {
     const data = snapshot.val();
@@ -34,7 +34,7 @@ function controller(io, firebase, socket) {
 
     console.log(dataArray);
     // console.log(data);
-    socket.emit('fireStatus', dataArray);
+    socket.emit('tialua', dataArray);
   });
 
   // Ngắt kết nối
