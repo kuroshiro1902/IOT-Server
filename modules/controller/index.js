@@ -10,31 +10,19 @@ function controller(io, firebase, socket) {
   console.log('Client connected');
 
   firebase.on('baochay', 'value', (snapshot) => {
-    const data = snapshot.val();
-    var dataArray = Object.values(data);
-    dataArray.reverse();
-
-    console.log(dataArray);
-    // console.log(data);
-    socket.emit('data', dataArray);
+    const data = Object.values(snapshot.val() ?? {}).reverse();
+    console.log('baochay');
+    socket.emit('data', data);
   });
-  firebase.on('nhietdodoam','value', (snapshot) => {
-    const data = snapshot.val();
-    var dataArray = Object.values(data);
-    dataArray.reverse()
-
-    console.log(dataArray);
-    // console.log(data);
-    socket.emit('fireStatus', dataArray);
+  firebase.on('nhietdodoam ', 'value', (snapshot) => {
+    const data = Object.values(snapshot.val() ?? {}).reverse();
+    console.log('nhietdodoam ', data);
+    socket.emit('fireStatus', data);
   });
-  firebase.on('tialua','value', (snapshot) => {
-    const data = snapshot.val();
-    var dataArray = Object.values(data);
-    dataArray.reverse()
-
-    console.log(dataArray);
-    // console.log(data);
-    socket.emit('fireStatus', dataArray);
+  firebase.on('tialua', 'value', (snapshot) => {
+    const data = Object.values(snapshot.val() ?? {}).reverse();
+    console.log('tialua ', data);
+    socket.emit('fireStatus', data);
   });
 
   // Ngắt kết nối
