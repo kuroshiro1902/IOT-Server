@@ -18,6 +18,24 @@ function controller(io, firebase, socket) {
     // console.log(data);
     socket.emit('data', dataArray);
   });
+  firebase.on('nhietdodoam','value', (snapshot) => {
+    const data = snapshot.val();
+    var dataArray = Object.values(data);
+    dataArray.reverse()
+
+    console.log(dataArray);
+    // console.log(data);
+    socket.emit('fireStatus', dataArray);
+  });
+  firebase.on('tialua','value', (snapshot) => {
+    const data = snapshot.val();
+    var dataArray = Object.values(data);
+    dataArray.reverse()
+
+    console.log(dataArray);
+    // console.log(data);
+    socket.emit('fireStatus', dataArray);
+  });
 
   // Ngắt kết nối
   socket.on('disconnect', () => {

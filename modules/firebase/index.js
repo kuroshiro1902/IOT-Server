@@ -4,7 +4,9 @@ class Firebase {
   admin;
   database;
   userRef;
-  dataRef;
+  baochayRef;
+  nhietdodoamRef;
+  tialuaRef;
 
   constructor(databaseURL) {
     this.admin = require('firebase-admin');
@@ -15,7 +17,9 @@ class Firebase {
 
     this.database = this.admin.database();
     this.userRef = this.database.ref('user');
-    this.dataRef = this.database.ref('baochay');
+    this.baochayRef = this.database.ref('baochay');
+    this.nhietdodoamRef = this.database.ref('nhietdodoam');
+    this.tialuaRef = this.database.ref('tialua');
 
     // Xử lý lỗi khi kết nối đến Firebase
     this.database.ref('.info/connected').on('value', (snapshot) => {
@@ -33,7 +37,14 @@ class Firebase {
    * @param {(a: database.DataSnapshot, b?: string | null) => any} handler
    */
   on(type, event, handler) {
-    const ref = type === 'user' ? this.userRef : this.dataRef;
+    const ref =
+      type === 'user'
+        ? this.userRef
+        : type === 'baochay'
+        ? this.baochayRef
+        : type === 'tialua'
+        ? this.tialuaRef
+        : this.nhietdodoamRef;
     // ref.on(event, handler);
 
     ref.orderByChild('timestamp').limitToLast(10).on(event, handler);
