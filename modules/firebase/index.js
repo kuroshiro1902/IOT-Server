@@ -17,12 +17,11 @@ class Firebase {
     });
 
     this.database = this.admin.database();
-    this.userRef = this.database.ref('user');
-    this.khigasRef = this.database.ref('khigas');
-    this.nhietdoRef = this.database.ref('nhietdo');
-    this.doamRef = this.database.ref('doam');
-    this.tialuaRef = this.database.ref('tialua');
-
+    this.userRef = this.database.ref('/user');
+    this.khigasRef = this.database.ref('/khigas');
+    this.nhietdoRef = this.database.ref('/nhietdo');
+    this.doamRef = this.database.ref('/doam');
+    this.tialuaRef = this.database.ref('/tialua');
     // Xử lý lỗi khi kết nối đến Firebase
     this.database.ref('.info/connected').on('value', (snapshot) => {
       if (snapshot.val() === true) {
@@ -45,10 +44,11 @@ class Firebase {
         : type === 'khigas'
         ? this.khigasRef
         : type === 'tialua'
-        ? this.tialuaRef:
-        type === 'nhietdo'
-        ?this.nhietdoRef:this.doamRef
-        ref.orderByChild('time').limitToLast(10).on(event, handler);
+        ? this.tialuaRef
+        : type === 'nhietdo'
+        ? this.nhietdoRef
+        : this.doamRef;
+    ref.orderByChild('time').limitToLast(10).on(event, handler);
   }
 }
 
