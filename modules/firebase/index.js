@@ -5,8 +5,9 @@ class Firebase {
   database;
   userRef;
   khigasRef;
-  nhietdodoamRef;
+  nhietdoRef;
   tialuaRef;
+  doamRef;
 
   constructor(databaseURL) {
     this.admin = require('firebase-admin');
@@ -18,7 +19,8 @@ class Firebase {
     this.database = this.admin.database();
     this.userRef = this.database.ref('user');
     this.khigasRef = this.database.ref('khigas');
-    this.nhietdodoamRef = this.database.ref('nhietdodoam');
+    this.nhietdoRef = this.database.ref('nhietdo');
+    this.doamRef = this.database.ref('doam');
     this.tialuaRef = this.database.ref('tialua');
 
     // Xử lý lỗi khi kết nối đến Firebase
@@ -32,7 +34,7 @@ class Firebase {
   }
 
   /**
-   * @param {'user' | 'baochay' | 'tialua' | 'nhietdodoam'} type
+   * @param {'user' | 'baochay' | 'tialua' | 'nhietdo'|'doam'} type
    * @param {| 'value'| 'child_added' | 'child_changed' | 'child_moved' | 'child_removed'} event
    * @param {(a: database.DataSnapshot, b?: string | null) => any} handler
    */
@@ -43,9 +45,10 @@ class Firebase {
         : type === 'khigas'
         ? this.khigasRef
         : type === 'tialua'
-        ? this.tialuaRef
-        : this.nhietdodoamRef;
-    ref.on(event, handler);
+        ? this.tialuaRef:
+        type === 'nhietdo'
+        ?this.nhietdoRef:this.doamRef
+        ref.orderByChild('time').limitToLast(10).on(event, handler);
   }
 }
 

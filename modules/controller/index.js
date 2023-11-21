@@ -7,41 +7,41 @@ const Firebase = require('../firebase');
  * @param {Socket} socket
  */
 function controller(io, firebase, socket) {
-  console.log('Client connected');
-
-
+console.log(socket.id)
+  socket.on("disconnect", ()=> console.log("disconnect"));
   firebase.on('khigas','value', (snapshot) => {
     const data = snapshot.val();
     var dataArray = Object.values(data);
     dataArray.reverse()
 
-    console.log(dataArray);
-    // console.log(data);
     socket.emit('khigas', dataArray);
   });
-  firebase.on('nhietdodoam','value', (snapshot) => {
+  // socket.emit("khigas",[123])
+  firebase.on('nhietdo','value', (snapshot) => {
     const data = snapshot.val();
     var dataArray = Object.values(data);
     dataArray.reverse()
 
-    console.log(dataArray);
-    // console.log(data);
-    socket.emit('nhietdodoam', dataArray);
+    socket.emit('nhietdo', dataArray);
+  });
+  firebase.on('doam','value', (snapshot) => {
+    const data = snapshot.val();
+    var dataArray = Object.values(data);
+    dataArray.reverse()
+
+    socket.emit('doam', dataArray);
   });
   firebase.on('tialua','value', (snapshot) => {
     const data = snapshot.val();
     var dataArray = Object.values(data);
     dataArray.reverse()
 
-    console.log(dataArray);
-    // console.log(data);
     socket.emit('tialua', dataArray);
 
   });
 
   // Ngắt kết nối
   socket.on('disconnect', () => {
-    console.log('Client disconnected');
   });
 }
 
