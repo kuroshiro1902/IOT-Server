@@ -1,20 +1,16 @@
-const { Server: SocketServer } = require('socket.io');
+const { Server: SocketServer, Socket } = require('socket.io');
 const { Server } = require('http');
-const Firebase = require('../firebase');
-const controller = require('../controller');
 
 class IO {
   /**
    * @type {SocketServer}
    */
   io;
-  firebase;
 
   /**
    * @param {Server} server
-   * @param {Firebase} firebase
    */
-  constructor(server, firebase) {
+  constructor(server) {
     this.io = require('socket.io')(server, {
       cors: {
         origin: '*',
@@ -22,10 +18,14 @@ class IO {
         credentials: true,
       },
     });
+  }
 
-    this.firebase = firebase;
-
-    this.io.on('connection', (socket) => controller(this.io, firebase, socket));
+  /**
+   * @param {string} event
+   * @param {(socket: Socket) => void} handler
+   */
+  on(event, handler) {
+    this.io.on(event, handler);
   }
 }
 
