@@ -45,10 +45,25 @@ class Firebase {
         : type === 'khigas'
         ? this.khigasRef
         : type === 'tialua'
-        ? this.tialuaRef:
-        type === 'nhietdo'
-        ?this.nhietdoRef:this.doamRef
-        ref.orderByChild('time').limitToLast(10).on(event, handler);
+        ? this.tialuaRef
+        : type === 'nhietdo'
+        ? this.nhietdoRef
+        : this.doamRef;
+    ref.orderByChild('time').limitToLast(10).on(event, handler);
+  }
+  onDate(type, event, handler, date) {
+    console.log({date})
+    const startTimestamp = `${date} 00:00:00`
+    const endTimestamp =`${date} 23:59:59`
+    const ref =
+      type === 'khigas'
+        ? this.khigasRef
+        : type === 'tialua'
+        ? this.tialuaRef
+        : type === 'nhietdo'
+        ? this.nhietdoRef
+        : this.doamRef;
+    ref.orderByChild('time').startAt(startTimestamp).endAt(endTimestamp).on(event, handler);
   }
 }
 
