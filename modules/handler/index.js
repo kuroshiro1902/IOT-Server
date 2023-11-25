@@ -22,7 +22,7 @@ class Handler {
       .then((data) => {
         if (!!data) {
           console.log("data",data)
-          // socket.emit(event, data);
+          socket.emit(event, data);
         }
       })
       .catch((err) => console.log(err));

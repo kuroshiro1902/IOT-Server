@@ -11,8 +11,8 @@ require('dotenv').config();
 const app = new App(3000);
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
-app.app.use(database.middlewares);
-app.use('/api', database.router);
+// app.app.use(database.middlewares);
+// app.use('/api', database.router);
 
 
 const firebase = new Firebase();
