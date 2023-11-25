@@ -16,7 +16,7 @@ class Handler {
    */
   emitNewestValue(event, snapshot, socket) {
     const data = snapshot.val();
-    let url = `http://localhost:3000/${event}`;
+    let url = `http://localhost:8000/${event}`;
     fetch(url, { ...this.requestOptions, body: JSON.stringify({value: data, time: new Date()}) })
       .then((res) => res.json())
       .then((data) => {

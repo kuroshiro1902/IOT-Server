@@ -14,6 +14,7 @@ const app = new App(3000);
 app.app.use(database.middlewares);
 app.use('/api', database.router);
 
+
 const firebase = new Firebase();
 
 const io = new IO(app.server);
