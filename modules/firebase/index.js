@@ -3,7 +3,6 @@ const { database } = require('firebase-admin');
 class Firebase {
   admin;
   database;
-  userRef;
   khigasRef;
   nhietdoRef;
   tialuaRef;
@@ -17,11 +16,10 @@ class Firebase {
     });
 
     this.database = this.admin.database();
-    this.userRef = this.database.ref('/user');
-    this.khigasRef = this.database.ref('/khigas');
-    this.nhietdoRef = this.database.ref('/nhietdo');
-    this.doamRef = this.database.ref('/doam');
-    this.tialuaRef = this.database.ref('/tialua');
+    this.khigasRef = this.database.ref('/gas');
+    this.nhietdoRef = this.database.ref('/temp');
+    this.doamRef = this.database.ref('/hum');
+    this.tialuaRef = this.database.ref('/fire');
     // Xử lý lỗi khi kết nối đến Firebase
     this.database.ref('.info/connected').on('value', (snapshot) => {
       if (snapshot.val() === true) {
@@ -33,26 +31,23 @@ class Firebase {
   }
 
   /**
-   * @param {'user' | 'baochay' | 'tialua' | 'nhietdo'|'doam'} type
+  * @param { 'gas' | 'fire' | 'hum'|'temp'} type
    * @param {| 'value'| 'child_added' | 'child_changed' | 'child_moved' | 'child_removed'} event
    * @param {(a: database.DataSnapshot, b?: string | null) => any} handler
    */
   on(type, event, handler) {
     const ref =
-      type === 'user'
-        ? this.userRef
-        : type === 'khigas'
+       type === 'khigas'
         ? this.khigasRef
         : type === 'tialua'
         ? this.tialuaRef
         : type === 'nhietdo'
         ? this.nhietdoRef
         : this.doamRef;
-    ref.orderByChild('time').limitToLast(10).on(event, handler);
+    ref.on(event, handler);
 
   }
   onDate(type, event, handler, date) {
-    console.log({date})
     const startTimestamp = `${date} 00:00:00`
     const endTimestamp =`${date} 23:59:59`
     const ref =

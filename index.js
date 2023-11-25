@@ -2,15 +2,17 @@ const App = require('./modules/app');
 const Firebase = require('./modules/firebase');
 const Handler = require('./modules/handler');
 const IO = require('./modules/socket');
-
+const database= require('./modules/database')
 require('dotenv').config();
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+// const indexRouter = require('./routes/index');
+// const usersRouter = require('./routes/users');
 
 const app = new App(3000);
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
+app.app.use(database.middlewares);
+app.use('/api', database.router);
 
 const firebase = new Firebase();
 
