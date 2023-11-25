@@ -85,7 +85,7 @@ class Handler {
     const url = `${process.env.DB_URL}${event}`;
     fetch(url, {
       ...this.postConfig,
-      body: JSON.stringify({ value: data, time: new Date().getTime() }),
+      body: JSON.stringify({ value: this.currentData, time: new Date().getTime() }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -104,13 +104,15 @@ class Handler {
    * @param {Socket} socket
    */
   async emitFilterByTime(start, end, type, socket) {
-    start = new Date(start).getTime();
-    end = new Date(end + ' 23:59:59').getTime();
+    console.log({start,end})
+    // start = new Date(start).getTime();
+    // end = new Date(end + ' 23:59:59').getTime();
     const url = `${process.env.DB_URL}${type}?time_gte=${start}&time_lte=${end}`;
     try {
       const data = await (await fetch(url)).json();
       if (!!data) {
-        socket.emit("filter-by-time", data)
+        console.log({data})
+        socket.emit("filter-by-time", data,type)
       }
     } catch (error) {}
   }
