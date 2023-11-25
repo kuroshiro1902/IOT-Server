@@ -5,15 +5,12 @@ const IO = require('./modules/socket');
 const database= require('./modules/database')
 require('dotenv').config();
 
-// const indexRouter = require('./routes/index');
-// const usersRouter = require('./routes/users');
+database.listen(8000, ()=>{
+  console.log("Database listening on port 8000...");
+})
+
 
 const app = new App(3000);
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-// app.app.use(database.middlewares);
-// app.use('/api', database.router);
-
 
 const firebase = new Firebase();
 
@@ -26,6 +23,11 @@ io.on('connection', (socket) => {
   firebase.on('khigas', 'value', (snapshot) => handler.emitNewestValue('khigas', snapshot, socket));
   firebase.on('doam', 'value', (snapshot) => handler.emitNewestValue('doam', snapshot, socket));
   firebase.on('nhietdo', 'value', (snapshot) => handler.emitNewestValue('nhietdo', snapshot, socket));
+
+  //type: 'tialua'|'nhietdo'|'doam'|'khigas'
+  socket.on("filter-by-time", ({start, end}, type )=>{
+    handler.emitFilterByTime(start, end, type, socket)
+  })
 });
 
 app.start();
