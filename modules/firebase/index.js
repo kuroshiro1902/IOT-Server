@@ -47,20 +47,6 @@ class Firebase {
     ref.on(event, handler);
 
   }
-  onDate(type, event, handler, date) {
-    const startTimestamp = `${date} 00:00:00`
-    const endTimestamp =`${date} 23:59:59`
-    const ref =
-      type === 'khigas'
-        ? this.khigasRef
-        : type === 'tialua'
-        ? this.tialuaRef
-        : type === 'nhietdo'
-        ? this.nhietdoRef
-        : this.doamRef;
-    ref.orderByChild('time').startAt(startTimestamp).endAt(endTimestamp).on(event, handler);
-
-  }
 }
 
 module.exports = Firebase;

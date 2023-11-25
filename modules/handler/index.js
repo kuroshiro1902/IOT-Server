@@ -28,12 +28,18 @@ function sendVerificationEmail(email, code) {
 }
 
 class Handler {
-  requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  headers = {
+    'Content-Type': 'application/json',
   };
+  getConfig = {
+    headers: this.headers,
+    method: 'GET',
+  };
+  postConfig = {
+    headers: this.headers,
+    method: 'POST',
+  };
+
 
   constructor() {
     // Biến để theo dõi trạng thái email
@@ -76,8 +82,11 @@ class Handler {
       // socket.emit('canhbao', `Nhiệt độ đang vượt mức cho phép`);
     }
 
-    let url = `http://localhost:8000/${event}`;
-    fetch(url, { ...this.requestOptions, body: JSON.stringify({ value: this.currentData, time: new Date() }) })
+    const url = `${process.env.DB_URL}${event}`;
+    fetch(url, {
+      ...this.postConfig,
+      body: JSON.stringify({ value: data, time: new Date().getTime() }),
+    })
       .then((res) => res.json())
       .then((data) => {
         if (!!data) {
@@ -85,6 +94,25 @@ class Handler {
         }
       })
       .catch((err) => console.log(err));
+  }
+
+  /**
+   * Lọc dữ liệu theo thời gian
+   * @param {string} start yyyy/mm/dd
+   * @param {string} end yyyy/mm/dd
+   * @param {'tialua'|'nhietdo'|'doam'|'khigas'} type
+   * @param {Socket} socket
+   */
+  async emitFilterByTime(start, end, type, socket) {
+    start = new Date(start).getTime();
+    end = new Date(end + ' 23:59:59').getTime();
+    const url = `${process.env.DB_URL}${type}?time_gte=${start}&time_lte=${end}`;
+    try {
+      const data = await (await fetch(url)).json();
+      if (!!data) {
+        socket.emit("filter-by-time", data)
+      }
+    } catch (error) {}
   }
 }
 
