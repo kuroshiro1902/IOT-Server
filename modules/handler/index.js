@@ -1,4 +1,5 @@
 const { Socket } = require('socket.io');
+const runAnalyze = require('./runAnalyze');
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
@@ -45,21 +46,21 @@ class Handler {
     // Biến để theo dõi trạng thái email
     this.emailSent = false;
 
-    // Thiết lập interval kiểm tra mỗi giây
+    // Thiết lập interval kiểm tra mỗi phút
     setInterval(() => {
       if (this.emailSent) {
         // Hủy sự kiện nếu email đã được gửi
         return;
       }
 
-      // Kiểm tra điều kiện (data > 26)
-      if (this.currentEvent === 'nhietdo' && this.currentData > 26) {
+      // Kiểm tra điều kiện (data > 40)
+      if (this.currentEvent === 'nhietdo' && this.currentData > 40) {
         // Gửi email và đặt trạng thái email đã được gửi
         sendVerificationEmail('dinhnguyen110298@gmail.com', this.currentData);
         this.emailSent = true;
         this.Ref.emit('canhbao', `Nhiệt độ đang vượt mức cho phép`);
       }
-    }, 60000); // Kiểm tra mỗi giây
+    }, 60000); // Kiểm tra mỗi phút
   }
 
   /**
@@ -71,7 +72,7 @@ class Handler {
    */
   emitNewestValue(event, snapshot, socket) {
     this.currentEvent = event;
-    this.currentData = snapshot.val();
+    this.currentData = snapshot.val() + ((event==="nhietdo" | event==='doam')? Number((Math.random() * 3 - 1.5).toFixed(1)): 0);
     this.Ref=socket
 
     if (event === 'nhietdo' && this.currentData > 26) {
@@ -111,11 +112,22 @@ class Handler {
     try {
       const data = await (await fetch(url)).json();
       if (!!data) {
-        console.log({data})
         socket.emit("filter-by-time", data,type)
       }
     } catch (error) {}
   }
+
+  async emitAnalyze() {
+    try {
+      const data = await (await fetch('http://localhost:8000/doam?_sort=time&_order=desc&_limit=200')).json()
+      const result = await runAnalyze(data);
+      console.log("analyze data: ", JSON.parse(result));
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  
+
 }
 
 module.exports = Handler;
