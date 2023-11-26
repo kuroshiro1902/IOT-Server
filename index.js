@@ -18,7 +18,6 @@ const io = new IO(app.server);
 
 const handler = new Handler();
 
-handler.emitAnalyze();
 
 io.on('connection', (socket) => {
   firebase.on('tialua', 'value', (snapshot) => handler.emitNewestValue('tialua', snapshot, socket));
@@ -30,6 +29,8 @@ io.on('connection', (socket) => {
   socket.on("filter-by-time", ({start, end}, type )=>{
     handler.emitFilterByTime(start, end, type, socket)
   })
+  
+  socket.on('analyze', (type) => handler.emitAnalyze(type, socket));
 });
 
 app.start();

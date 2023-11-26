@@ -117,13 +117,18 @@ class Handler {
     } catch (error) {}
   }
 
-  async emitAnalyze() {
+  /**
+   * Phân tích và dự đoán nhiệt độ độ ẩm
+   * @param {'nhietdo'|'doam'} type
+   * @param {Socket} socket
+   */
+  async emitAnalyze(type, socket) {
     try {
-      const data = await (await fetch('http://localhost:8000/doam?_sort=time&_order=desc&_limit=200')).json()
+      const data = await (await fetch(`${process.env.DB_URL}${type}?_sort=time&_order=desc&_limit=200`)).json()
       const result = await runAnalyze(data);
-      console.log("analyze data: ", JSON.parse(result));
+      socket.emit('analyze', {status: "success", data: JSON.parse(result)})
     } catch (err) {
-      console.error(err);
+      socket.emit('analyze', {status: "error", data: err})
     }
   }
   
