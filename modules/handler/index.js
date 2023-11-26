@@ -75,7 +75,7 @@ class Handler {
     this.currentData = snapshot.val() + ((event==="nhietdo" | event==='doam')? Number((Math.random() * 3 - 1.5).toFixed(1)): 0);
     this.Ref=socket
 
-    if (event === 'nhietdo' && this.currentData > 26) {
+    if (event === 'nhietdo' && this.currentData > 40) {
       // Reset trạng thái email đã được gửi
       this.emailSent = false;
 
@@ -117,6 +117,20 @@ class Handler {
     } catch (error) {}
   }
 
+  async emitFilterBy10( type, socket) {
+    console.log({type})
+    // start = new Date(start).getTime();
+    // end = new Date(end + ' 23:59:59').getTime();
+    const url = `${process.env.DB_URL}${type}?_sort=time&_order=desc&_limit=10`;
+    try {
+      const data = await (await fetch(url)).json();
+      if (!!data) {
+        console.log({data})
+        socket.emit("last-ten", data,type)
+      }
+    } catch (error) {}
+  }
+
   /**
    * Phân tích và dự đoán nhiệt độ độ ẩm
    * @param {'nhietdo'|'doam'} type
@@ -126,12 +140,11 @@ class Handler {
     try {
       const data = await (await fetch(`${process.env.DB_URL}${type}?_sort=time&_order=desc&_limit=200`)).json()
       const result = await runAnalyze(data);
-      socket.emit('analyze', {status: "success", data: JSON.parse(result)})
+      console.log("analyze data: ", JSON.parse(result));
     } catch (err) {
       socket.emit('analyze', {status: "error", data: err})
     }
   }
-  
 
 }
 

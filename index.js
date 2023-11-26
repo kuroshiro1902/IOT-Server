@@ -29,6 +29,9 @@ io.on('connection', (socket) => {
   socket.on("filter-by-time", ({start, end}, type )=>{
     handler.emitFilterByTime(start, end, type, socket)
   })
+  socket.on("last-ten", ( type )=>{
+    handler.emitFilterBy10( type, socket)
+  })
   
   socket.on('analyze', (type) => handler.emitAnalyze(type, socket));
 });
