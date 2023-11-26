@@ -18,6 +18,8 @@ const io = new IO(app.server);
 
 const handler = new Handler();
 
+handler.emitAnalyze();
+
 io.on('connection', (socket) => {
   firebase.on('tialua', 'value', (snapshot) => handler.emitNewestValue('tialua', snapshot, socket));
   firebase.on('khigas', 'value', (snapshot) => handler.emitNewestValue('khigas', snapshot, socket));
