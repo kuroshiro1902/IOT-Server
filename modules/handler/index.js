@@ -75,7 +75,7 @@ class Handler {
     this.currentData = snapshot.val() + ((event==="nhietdo" | event==='doam')? Number((Math.random() * 3 - 1.5).toFixed(1)): 0);
     this.Ref=socket
 
-    if (event === 'nhietdo' && this.currentData > 26) {
+    if (event === 'nhietdo' && this.currentData > 40) {
       // Reset trạng thái email đã được gửi
       this.emailSent = false;
 
@@ -117,16 +117,29 @@ class Handler {
     } catch (error) {}
   }
 
+  async emitFilterBy10( type, socket) {
+    console.log({type})
+    // start = new Date(start).getTime();
+    // end = new Date(end + ' 23:59:59').getTime();
+    const url = `${process.env.DB_URL}${type}?_sort=time&_order=desc&_limit=10`;
+    try {
+      const data = await (await fetch(url)).json();
+      if (!!data) {
+        console.log({data})
+        socket.emit("last-ten", data,type)
+      }
+    } catch (error) {}
+  }
+
   async emitAnalyze() {
     try {
       const data = await (await fetch('http://localhost:8000/doam?_sort=time&_order=desc&_limit=200')).json()
       const result = await runAnalyze(data);
-      console.log("analyze data: ", JSON.parse(result));
+      socket JSON.parse(result));
     } catch (err) {
       console.error(err);
     }
   }
-  
 
 }
 
